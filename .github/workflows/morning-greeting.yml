@@ -1,0 +1,21 @@
+name: Morning greeting
+
+on:
+  schedule:
+    # 23:40 UTC = 5:10 AM IST. GitHub often starts scheduled jobs late, so we
+    # start early and the script waits until exactly 5:30 AM IST.
+    - cron: "40 23 * * *"
+  workflow_dispatch: # allows a manual run from the Actions tab
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      TZ: Asia/Kolkata
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/morning-greeting.js --once
